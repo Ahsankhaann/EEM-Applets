@@ -7,4 +7,4 @@ and storing it in a variable named "VAR1". Action 2.0 is displaying a syslog msg
 event manager applet input
  event none
  action 1.0 gets VAR1
- action 2.0 syslog msg "What you entered is "$VAR1""
+ action 2.0 syslog msg "What you entered is \"$VAR1\""
