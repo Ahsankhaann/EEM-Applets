@@ -1,0 +1,15 @@
+//Another example applet of foreach loop usage, here the array of instance has numbers in it with the foreach logic so every one of them will be parsed. 
+Now along with the usual parsing of every element of array and printing the value at each iteration on action 2.0, we are also including some actions alongside 
+like in action 2.1, 2.2 and then on 2.3 we are displaying the output of the last action using $_cli_result command. So in this case, 2.3 is collecting the
+output of 2.2 command which was the previous command to it and displaying it and finally action 3.0 is breaking out the foreach loop after all iterations are
+done//
+
+
+event manager applet iteration2
+ event none
+ action 1.0 foreach instance "1 2 3 4 5 6 7 8 9 10"
+ action 2.0  puts "The current instance is $instance"
+ action 2.1  cli command "enable"
+ action 2.2  cli command "sh ip int brief"
+ action 2.3  puts "$_cli_result"
+ action 3.0 end
