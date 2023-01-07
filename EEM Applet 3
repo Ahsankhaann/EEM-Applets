@@ -1,6 +1,7 @@
 //Here we have a applet named SIR (Show ip route). we are looking for "show ip route" regular expresion in event tag 1 in a asynchronous manner means the EEM
 script will run along with the show ip route and skip no means that we are not skipping the execution of show ip route on the cli and the user will be 
-displayed the output of it. Now another event tag 2 says none means this applet can triggered manually.
+displayed the output of it whereas skip yes means the user wont be displayed the output of the command he typed. Now another event tag 2 says none means this 
+applet can triggered manually.
 Furthermore, we defined trigger conditions that either event 1 happens or event 2 happens, they both can trigger the actions below and the attributes
 of tag 1 means event 1 has to occur twice in order to trigger this. In oher words, user has to type show ip route twice in order for the action to be taken
 which is defined below.
