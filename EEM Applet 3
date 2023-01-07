@@ -1,0 +1,7 @@
+event manager applet SIR
+ event tag 1 cli pattern "show ip route" sync no skip no
+ event tag 2 none
+ trigger
+  correlate event 1 or event 2
+  attribute tag 1 occurs 2
+ action 1.0 puts "You've used that command enough"
