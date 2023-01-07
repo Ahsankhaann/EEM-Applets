@@ -1,0 +1,13 @@
+//Here the applet is named as loop. Event is set to none so we can manually run it, action 1.0 is setting a variable v with value of 1. The action 2.0
+is defining a while loop saying keep running until the value of v ($v) is less than or equal to 10. Action 3.0 is displaying the value of v currently. 
+Action 4.0 is incrementing the value of v by 1 in every iteration of the while loop. Action 5.0 is breaking out of the loop and it will only run when while 
+loop's condition goes false.
+
+event manager applet loop
+ event none
+ action 1.0 set v "1"
+ action 2.0 while $v le 10
+ action 3.0  puts "v = $v"
+ action 3.5  wait 1
+ action 4.0  increment v 1
+ action 5.0 end
