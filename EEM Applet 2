@@ -1,0 +1,7 @@
+#In this applet, we are simply displaying the value of Cisco's builtin environment variable "_event_id" and again "$" is used to diplay the value inside
+_event_id currently.
+
+
+event manager applet none
+ event none
+ action 100 puts "$_event_id"
