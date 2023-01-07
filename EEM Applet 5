@@ -1,0 +1,9 @@
+//Here the EEM applet named wait has event none and the action is to prompt the CLI to wait for 120 seconds. It can be usesful feature when you have multiple
+actions and you want to induce a delay in between them. Also this delay command can sometimes freeze the CLI therefore its a good practise to be simultaneously
+connected to the same router with multiple sessions i.e. telnet or SSH. So you can use the command "event manager scheduler clear policy <job-id>", this will
+clear the ongoing wait process if it stucked your CLI access. The way to find job-id is to type "show event manager policy active"  and then use that job-id
+to clear the ongoing execution of an applet or hold it.
+
+event manager applet wait
+ event none
+ action 1.0 wait 120
