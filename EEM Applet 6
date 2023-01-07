@@ -1,0 +1,31 @@
+//In this EEM applet named 'sir', we have set up the event to a command cli pattern "^sh.* ip ro.*" which is a regular expression, the '^' sign means that only
+match the following regular expression when its at the beginning of the line, so event wouldn't be prompted when we are trying to change the cli pattern rather
+prompted when we are actually writing the command "show ip route". The sh.* or ro.* means that anything beginning with sh or ro and then anything else will be
+matched, so it could match rollercoaster or road or rock but thats not very troublesome to us in the context of cisco cli where ro refers to route. But
+its just an example to show you that you can write cli pattern like this but its recommended to write the full command in cli pattern i.e. show ip route
+because its taking those as a regular expression
+
+Now the sync yes in event cli pattern means that it will run synchronously, in other words the EEM script will run first before the actual "show ip route"
+command depending on the value of  _exit_status. If _exit_status is 0, the user's typed command will not run and if it is 1 then it will run the user's typed
+command. 
+This "^" will also eliminate the occurence of action 110 twice when you type "y", so before displaying the output of 'show ip route' it will instead prompt
+action 110 for a second time because without "^", if somebody types 'show ip route' he will be prompted to action 110 and will be required to enter y or n or 
+anything else. If he type anything else, it will set the _exit_status to 0 and the EEM script will not run the entered command and the user won't be shown the 
+output. If he typed "y" then the script will set the _exit_status to 1 and take the command but when it takes the command, that will again be taken as a trigger
+to prompt action 110 again. Therefore adding "^" the beginning of the string right there will make it only match the command if it's entered in the beginning 
+of the line instead when its entered literally anywhere else. //
+
+
+
+
+
+event manager applet sir
+ event cli pattern "^sh.* ip ro.*" sync yes
+ action 110 puts "Are you sure (y/n)?"
+ action 120 gets ANS
+ action 130 if $ANS eq "y" goto 160
+ action 140 set _exit_status "0"
+ action 150 exit
+ action 160 set _exit_status "1"
+ action 170 exit
+ exit
