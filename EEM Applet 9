@@ -1,0 +1,9 @@
+//Simple usage of foreach loop is done in the below EEM applet. Action 1.0 is using a foreach logic and using that logic on instance which has several elements
+in it, its sort of like an array. Action 2.0 is printing the value of instance at each instance as it parses through the array. Action 3.0 is breaking out the
+foreach loop which ofcourse will run after all iterations are done.//
+
+event manager applet iteration
+ event none
+ action 1.0 foreach instance "red blue green yellow purple black white"
+ action 2.0  puts "The current instance is $instance"
+ action 3.0 end
