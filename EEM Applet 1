@@ -1,0 +1,16 @@
+#Here we have made a user-defined environment variable named "VAR" with a value of "Ahsan", then we made a EEM applet with an event 'None". The event none can
+serve the purpose of executing this applet manually if we wish to. So in multiple event support, we can use one actual event and one event 'none' so we can
+test our applet without causing the actual event to cause. Here we just displayed the value of the VAR as output using action puts command and '$' means that it
+print the value of $VAR and not print the VAR itself. Then we set the value of VAR in another subsequent action 1.1 and then displayed it again in 1.2 to
+display the changed value.
+
+#You can manually execute this applet by typing "event manager run test" command.
+
+event manager environment VAR Ahsan
+event manager applet test
+ event none
+ action 1.0 puts "$VAR"
+ action 1.1 set VAR "changed to Clarent"
+ action 1.2 puts "$VAR"
+ exit
+ 
