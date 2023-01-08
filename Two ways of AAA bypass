@@ -1,0 +1,30 @@
+//For bypassing authorization of TCLScript//
+event manager policy <policy-name> authorization bypass
+
+//For bypasing authorization of EEM Applet//
+event manager applet <applet-name> authorization bypass
+
+
+//Another method for bypasing authorization of EEM applet or TCLScript if you're doing tacacs+ command authorization and fallback local//
+#Global config
+AAA new-model
+AAA authentication login def group tacacs+ local
+AAA authentication login EEMScript none
+AAA authorization exec EEMScript none 
+AAA authorization command 0 EEMScript none
+AAA authorization command 1 EEMScript none
+AAA authorization command 15 EEMScript none
+
+#Line vty 0 
+login authentication EEMScript
+authorization exec EEMScript
+Authorization commands 0 EEMScript
+Authorization commands 1 EEMScript
+Authorization commands 15 EEMScript
+transport input none  
+length 0  #set the terminal length to 0 because EEM doesn't need the terminal length that way EEM doesn't take up RAM on the router
+
+//Although EEM is technically coming in through a VTY line it doesn't actually use any of the vty line protocol so thats why we said "transport input none" 
+that prevents anybody else from accessing line vty 0 where unauthorized access and authentication is permitted. Now the other users who will try to telnet or
+SSH will be directed to line vty 1 and the subsequent lines after it which do not have the broad access-control.//
+
