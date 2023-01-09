@@ -1,6 +1,6 @@
-#This is a simple applet, showing the usage of description and comments, desscription is just one per applet whereas comments can be done numerous times 
+//This is a simple applet, showing the usage of description and comments, desscription is just one per applet whereas comments can be done numerous times 
 within an applet using action commands. Now the searching only works for the description in TCLscript therefore you can make the decription in applet as long
-as you want but if you're using description in TCL, try to make it as brief as possible so that it can used in the searching.
+as you want but if you're using description in TCL, try to make it as brief as possible so that it can used in the searching//
 
 
 event manager applet test2
@@ -10,3 +10,14 @@ event manager applet test2
  action 1.1 cli command "enable"
  action 1.2 cli command "sh ip route"
  action 1.3 puts "$_cli_result"
+
+
+//Also i would like to mention here abit about maxrun and ratelmiit, where maxrun is the total amount of time that an applet should be allowed to take to 
+execute before the event manager assumes that the script has hung and kills it whereas ratelimit means that this script is not allowed to run more than once
+every x second. Now if you see below, the event none has maxrun of 60 second means whatever script you write below it should only be allowed to take max 60
+second before the process will be killed by event managaer and it can only be executed once every 20 second. In simple words u can only manually run it once
+every 20 second.//
+
+event manager applet maxrun_ratelimit
+event none maxrun 60 ratelimit 20
+
