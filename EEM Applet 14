@@ -1,0 +1,15 @@
+//Here we are matching on cli pattern wr.* mem'* or wr.* which are write memory or write, both are ways to copy running config to startup config. Now we 
+mentioned sync yes means the execution of those commands depends on the _exit_status and by default _exit_default is non existent which by IOS is taken as
+0. 0 means skip the execution of the command. Now we specified trigger condition of the event to 3 in a period of 60, so if the command is written 3 times in
+60 seconds then the action will take place and it can be triggered either with event tag 1 or event tag 2. And the action is simply a syslog message printing
+some output to user. Now the event condition is being matched everytime the user is saying write or write memory but it will only trigger the action when
+its entered 3 times within 60 seconds, but the sync yes has taken away the ability of the command to work at all. Therefore, you need to be careful when
+using cli pattern with sync yes. A quick fix of this would be to do sync no.//
+
+
+event manager applet cli_match
+ event tag 1 cli pattern "wr.* mem.*" sync yes
+ event tag 2 cli pattern "wr.*" sync yes
+ trigger occurs 3 period 60
+  correlate event 1 or event 2
+ action 1.0 syslog priority critical msg "write config entered too often"
