@@ -1,0 +1,21 @@
+//In this applet shutdown_int, event is none so it can be triggered manually, we are making use of regular expressions to read the output and do something
+with it. So in action 100 we are making sure our Event manager gets into the enable mode and then in action 110, it runs the command show ip int brief.
+In action 120, we are using regexp to read the term admin.* and down, the .* means that after admin, there could be anything we dont care like admininister or 
+administratively etc, we mentioned (admin.*) and (down) in parathesis so that they are treated as different entity and they are grouped together with a space
+in middle and they both are quoted in commas to be represented as a group, $_cli_resuslt is a input string and MATCH is an output variable. Action 130 is
+simply printing some text and action 140 is showing the value of output variable MATCH.//
+
+//Some points to note: Even thou undercore '_' is a delimiter in regular expresion which is treated as space but it doesn't seem to work in EEM so we have to 
+break them in chunks with paranthesis i.e. (). //
+
+//So its a weird example and I was just messing around just trying to show u how the regular expresssion work, this is not how i would normally do this, it 
+would be much better off doing it under show run command to begin with, so again its not formatted in the way we wanted exactly but like i said the main thing
+would be to use this against the output of one of the syslog variables.//
+
+event manager applet shutdown_int
+ event none
+ action 100 cli command "enable"
+ action 110 cli command "sh ip int bri"
+ action 120 regexp "(admin.*) (down)" "$_cli_result" MATCH
+ action 130 puts "The following interfaces are admin down:"
+ action 140 puts "$MATCH"
