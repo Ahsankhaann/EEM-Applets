@@ -15,13 +15,15 @@ output. If he typed "y" then the script will set the _exit_status to 1 and take 
 to prompt action 110 again. Therefore adding "^" the beginning of the string right there will make it only match the command if it's entered in the beginning 
 of the line instead when its entered literally anywhere else. //
 
+#One thing to note here in action 110 is \x3f, which means question mark '?', because when you write question mark in cisco, it takes it as context sensitive
+help indicator and doesn't write the character '?'.
 
 
 
 
 event manager applet sir
  event cli pattern "^sh.* ip ro.*" sync yes
- action 110 puts "Are you sure (y/n)?"
+ action 110 puts "Are you sure (y/n)\x3f"
  action 120 gets ANS
  action 130 if $ANS eq "y" goto 160
  action 140 set _exit_status "0"
