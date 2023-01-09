@@ -1,0 +1,19 @@
+//This is an example of application specific event detector where eventA is triggered by 20 sec timer and it sends a piece of information it could be an output 
+from the command line, any variable, it can be alot of things and those gets sent to the other event applet eventB, eventB then gets triggered when the
+subsystem 798 gets written to. So in eventA applet, first thing is we are defining event with a watchdog timer of 20 which simply means that run this event
+every 20 second. Action 1.0 is specifying a sub-system 798 and type 1 is just a placeholder so we can recall it later on eventB, and in that placeholder we can
+put up to 4 arguments but we just used arg1 for this example and typed in that arg1 a text which will be sent to the other applet eventB. And finally action 2.0
+is displaying an output to show that eventA infact ran with the watchdog timer logic. 
+Now we got eventB, where we are setting the event to application specific event and then specifying the very same subsystem of 798 and then type 1, so what
+this basically does is its triggering the eventB anytime anything is written to subsystem 789 and more specifically to type 1. Now we are putting action 1.0
+what this is doing is bringing back the value from type 1 and more specifically arg1 and displaying it in eventB. Now we could put action 2.0 here and said that
+eventB ran but we are still gonna know that EventB ran when it comes up and say "Every 20 second".//
+
+event manager applet eventA
+ event timer watchdog time 20
+ action 1.0 publish-event sub-system 798 type 1 arg1 "Every 20 second"
+ action 2.0 puts "Applet EventA ran"
+ 
+event manager applet eventB
+ event application sub-system 798 type 1
+ action 1.0 puts "value from eventA: $_application_data1"
