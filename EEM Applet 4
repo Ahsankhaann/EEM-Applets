@@ -1,7 +1,7 @@
 //Here we have created an EEM applet named input. Event is set to none for the ability to have manual execution. Then action 1.0 is getting input from user
 and storing it in a variable named "VAR1". Action 2.0 is displaying a syslog msg with some text  and then the actual output of the VAR1 is in quotations.
 Here the backslash is used to escape the normal meaning of the followng characters, in this case which would mean to end this parent quotation and instead tells
-it to actually print the quotes around $VAR1 to the screen. So our output would be shown like this : What you entered is "<value-of-VAR1>"
+it to actually print the quotes around $VAR1 to the screen. So our output would be shown like this : What you entered is "<value-of-VAR1>"           //
 
 
 
