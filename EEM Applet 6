@@ -16,7 +16,8 @@ to prompt action 110 again. Therefore adding "^" the beginning of the string rig
 of the line instead when its entered literally anywhere else. //
 
 #One thing to note here in action 110 is \x3f, which means question mark '?', because when you write question mark in cisco, it takes it as context sensitive
-help indicator and doesn't write the character '?'.
+help indicator and doesn't write the character '?' therefore backslash '/' mmeans to escape the normal meaning of the following characters and x3f is another
+way of writing ? in Cisco IOS EEM script.
 
 
 
