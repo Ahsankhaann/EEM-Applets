@@ -15,9 +15,9 @@ output. If he typed "y" then the script will set the _exit_status to 1 and take 
 to prompt action 110 again. Therefore adding "^" the beginning of the string right there will make it only match the command if it's entered in the beginning 
 of the line instead when its entered literally anywhere else. //
 
-#One thing to note here in action 110 is \x3f, which means question mark '?', because when you write question mark in cisco, it takes it as context sensitive
-help indicator and doesn't write the character '?' therefore backslash '/' mmeans to escape the normal meaning of the following characters and x3f is another
-way of writing ? in Cisco IOS EEM script.
+#One thing to note here in action 110 is \x3f, which means question mark '?'in hexadecimal format, because when you write question mark in cisco, it takes it as
+context sensitive help indicator and doesn't write the character '?' therefore backslash '/' means to escape the normal meaning of the following characters 
+and x3f is hexadecimal way of writing '?' in Cisco IOS EEM script.
 
 
 
