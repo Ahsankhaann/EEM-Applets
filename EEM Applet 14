@@ -13,3 +13,14 @@ event manager applet cli_match
  trigger occurs 3 period 60
   correlate event 1 or event 2
  action 1.0 syslog priority critical msg "write config entered too often"
+ 
+ 
+//Here's how to rectify the script, here the event condition is not matched everytime and only matched when the user has written the command write or write 
+memory 3 times within the period of 15 seconds. Now the write command that the user type will be executed for the first time and second time but on 3rd 
+occurence of it; the sync yes will trigger and it would kill the command and then action 1.0 will take place instead. This script is perfect for the purpose
+we were trying to do and is better than the above script where the user completely lost the ability to use that command as it was triggering the event on
+every match.//
+ 
+event manager applet cli_command
+ event cli pattern "wr.* (m.*)\x3f" occur 3 period 15 sync yes
+action 1.0 syslog priority critical msg "Write config entered too often"
