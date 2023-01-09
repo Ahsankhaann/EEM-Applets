@@ -24,3 +24,12 @@ every match.//
 event manager applet cli_command
  event cli pattern "wr.* (m.*)\x3f" occur 3 period 15 sync yes
 action 1.0 syslog priority critical msg "Write config entered too often"
+
+
+//Here's how to do the same thing with sync no.
+
+event manager applet cli_command
+ event cli pattern "wr.* (m.*)\x3f" occur 3 period 15 sync no skip yes
+action 1.0 syslog priority critical msg "Write config entered too often"
+
+ 
