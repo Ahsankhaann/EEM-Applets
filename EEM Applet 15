@@ -1,0 +1,50 @@
+//This example is of counters mainly and we are also using timers like watchdog is being used here for constantly run the applet every 20 second. 
+
+
+////This example is of counters mainly and we are also using timers like watchdog is being used here for constantly running the applet every 20 second. The 
+first applet i.e. counterA has a timer watchdog set to 20 seconds. Action 1.0 is displaying an output to show that the script had executed, and action 2.0
+is creating a counter named ERRORs which is subjected to increase operator and it is increasing the value of ERRORS by 1 everytime  the applet counterA runs.
+The counterB applet is then calling the same counter and checking the value of it, the entry operation is greater than and entry value is 3 so it means that 
+run this counterB script below if the value of ERRORS is greater than 3, and the exit-operator is less than and the exit-value is defined as 3 so if the value 
+of ERRORS is less than 3 then do not trigger the event so the script below wouldn't run. Now action 1.0 is again just a displaying us an output to show us
+that the EVent counterB had run and action 2.0 is setting the value of counter to 0. 
+So the counterA event will run 3 times and then on 4th time it will run along with counterB event because counterB event has a greater than operator not
+greater than and equal to and it then will also reset the value of ERRORS to 0, hence repeating the same process again.//
+
+event manager applet counterA
+ event timer watchdog time 20
+action 1.0 puts "Event Counter A ran"
+action 2.0 counter name "ERRORS" op inc value 1
+ 
+event manager applet counterB
+ event counter name ERRORS entry-val 3 entry-op gt exit-val 3 exit-op lt
+action 1.0 puts "Event Counter B ran"
+action 2.0 counter name "ERRORS" op set value 0
+
+
+
+
+
+
+
+
+//This another example is of counters mainly and we are also using timers like watchdog is being used here for constantly running the applet every 20 second. 
+The  first applet i.e. counterA has a timer watchdog set to 20 seconds. Action 1.0 is displaying an output to show that the script had executed, and action 2.0
+is creating a counter named ERRORs which is subjected to increase operator and it is increasing the value of ERRORS by 1 everytime the applet counterA runs.
+The counterB applet is then calling the same counter and checking the value of it, the entry operation is greater than & equal to and entry value is 3 so it 
+means that run this counterB script below if the value of ERRORS is greater than or equal to 3, and the exit-operator is less than and the exit-value is 
+defined as 3 so if the value of ERRORS is less than 3 then do not trigger the event so the script below wouldn't run. Now action 1.0 is again just a 
+displaying us an output to show us that the EVent counterB had run and action 2.0 is decrementing the value of ERRORS by 1 everytime it runs.
+So the event counterA will run 2 times and on 3rd time event counterB will run along with it constantly because counterB action 2.0 is decrementing the value
+of Errors from 3 to 2 and event counterA is then incrementing it by 1 so from 2 to 3, so from then onwards they both will continue to print their action 1.0
+one after the other.
+
+event manager applet counterA
+event timer watchdog time 20
+ action 1.0 puts "Event Counter A ran"
+ action 2.0 counter name "ERRORS" op inc value 1
+ 
+event manager applet counterB
+ event counter name ERRORS entry-val 3 entry-op ge exit-val 3 exit-op lt
+action 1.0 puts "Event Counter B ran"
+action 2.0 counter name "ERRORS" op dec value 1
