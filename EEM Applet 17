@@ -1,0 +1,27 @@
+//A good use case of track objects in EEM, gig 2 is primary link, if it goes down then the backup link int gig 3 will come up and when int gig 2 will be
+restored then int gig 3 will go down again. We can use action wait in applet INT-up so that whatever routing protocol is running will converge the restored
+primary link first before we go on and shutdown backup interface. So the wait induced will make sure that backup stays long enough for the primary link to be
+converged and be ready to forward then it will shutdown the backup interface. In this case we are assuming that backup interface is pay per usage and
+we are charged for using it. There's not alot we can do for applet int_down, it depends on the timers defined in OSPF or whatever protocol you are running
+on that interface and maybe u could run BFD to speed that up.//
+
+#Note: If you decide to use wait commands and set 20 seconds then your script wont run and be killed because of max-run which is default to 20 second as well
+in order to induce wait into your script, you need to be wary about maxrun timer and might need to tweak it above than the wait u defined in the script.
+
+track 100 int gig 2 line-protocol
+
+event manager applet int_down
+ event track 100 state down
+ action 1.0 puts "Primary int is down, backup goes up"
+ action 2.0 cli command "enable"
+ action 2.1 cli command "conf t"
+ action 2.2 cli command "int gig 3"
+ action 2.3 cli command "no shut"
+ 
+event manager applet int_up
+ event track 100 state up
+ action 1.0 puts "Primary int is restored, backup goes down"
+ action 2.0 cli command "enable"
+ action 2.1 cli command "conf t"
+ action 2.2 cli command "int gig 3"
+ action 2.3 cli command "shut"
