@@ -1,0 +1,11 @@
+#Simple use case of track objects in EEM and track 100 state can be changed from up to down to trigger this.
+
+
+track 100 stub-object
+exit
+
+event manager applet track1
+ event track 100 state down
+ action 1.0 track set 100 state up
+ action 1.5 track read 100
+ action 2.0 puts "track object $_track_number is $_track_state"
