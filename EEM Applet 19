@@ -1,6 +1,10 @@
 #Simple eem script for interface counter transmit_rate_pps which is transmitted packets per second rate. You can trigger it in lab environment by pinging via 
-that interface gig1 a 1000 packets in repeat.
+that interface gig1 a 1000 packets in repeat. Ping to broadcast adddress of 255.255.255.255 wont trigger it because it has a timeout value of 2 between every 
+ping and it sends 1 packet over 2 second, broadcast doesn't know that who is going to reply and sends ping to all addresses in its network and thats how it
+works by invoking a 2 second timeout. The pings however only take like 2 to 4 milliseconds for each one of these broadcast destinations but the point is it 
+still waited the time out of 2 seconds whereas Unicast packet is sent and when it gets a reply, it immediately sends another packet. 
+
 
 event manager applet interface
- event interface name GigabitEthernet1 parameter transmit_rate_pps entry-op ge entry-val 2 entry-type value poll-interval 1
+ event interface name GigabitEthernet1 parameter transmit_rate_pps entry-op ge entry-val 2 entry-type value poll-interval 0.5
  action 1.0 puts "PPS are more than 2"
