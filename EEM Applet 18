@@ -1,0 +1,9 @@
+#Examples of how regular expressions are  used in EEM.
+
+event manager applet regex
+ event none
+ action 1.0 regexp "(.*) (.*) (.*)" "one two three" MATCH SUB1 SUB2 SUB3
+ action 2.0 puts "MATCH is $MATCH"
+ action 2.1 puts "SUB1 is $SUB1"
+ action 2.2 puts "SUB2 is $SUB2"
+ action 2.3 puts "SUB3 is $SUB3"
