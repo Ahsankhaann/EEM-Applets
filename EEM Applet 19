@@ -1,10 +1,31 @@
-#Simple eem script for interface counter transmit_rate_pps which is transmitted packets per second rate. You can trigger it in lab environment by pinging via 
+//Simple eem script for interface counter transmit_rate_pps which is transmitted packets per second rate. You can trigger it in lab environment by pinging via 
 that interface gig1 a 1000 packets in repeat. Ping to broadcast adddress of 255.255.255.255 wont trigger it because it has a timeout value of 2 between every 
 ping and it sends 1 packet over 2 second, broadcast doesn't know that who is going to reply and sends ping to all addresses in its network and thats how it
 works by invoking a 2 second timeout. The pings however only take like 2 to 4 milliseconds for each one of these broadcast destinations but the point is it 
-still waited the time out of 2 seconds whereas Unicast packet is sent and when it gets a reply, it immediately sends another packet. 
+still waited the time out of 2 seconds whereas Unicast packet is sent and when it gets a reply, it immediately sends another packet//
+
+//Answers to clarity this from ChatGPT 
+In this specific EEM applet, the event will be triggered each time the "transmit_rate_pps" of interface 
+"GigabitEthernet1" is greater than or equal to the value of "2" (as specified by the "entry-op ge" and "entry-val 2" parameters). The script will poll the
+interface's transmit rate every 0.5 seconds (as specified by the "poll-interval 0.5" parameter). The number of times the event is triggered depends on the 
+current value of the transmit rate and how it changes over time. If the transmit rate is consistently above 2 PPS, then the event will be triggered repeatedly 
+every 0.5 seconds. If you're using a ping command with repeat 1000 to trigger the event, it will trigger an event each time a packet is sent and received, i.e.
+1000 times, as long as the transmit rate is more than 2 PPS.//
+
+//Also if you introduce exit-val, exit-op and exit-type in this event definition, what difference would it make ? Well look below:
+Introducing "exit-value", "exit-op" and "exit-type" in this EEM applet would change the way the event is handled when the conditions for the event are no longer
+met. The "exit-value" parameter is used to specify a threshold value for the monitored metric, in this case the "transmit_rate_pps" of interface 
+"GigabitEthernet1". The "exit-op" parameter is used to specify the operator that is used to compare the monitored metric with the "exit-value", such as
+"lt" (less than) or "le" (less than or equal to). The "exit-type" parameter is used to specify the type of the exit value, such as "value" or "percentage".
+For example, if you set "exit-value" to "1", "exit-op" to "le" and "exit-type" to "value", the script will stop triggering the event once the 
+"transmit_rate_pps" goes below 1. In other words, it would exit the event when the exit condition is met. This could be used to stop running certain commands
+or taking certain actions once the monitored metric falls below a certain threshold.//
+
+
 
 
 event manager applet interface
  event interface name GigabitEthernet1 parameter transmit_rate_pps entry-op ge entry-val 2 entry-type value poll-interval 0.5
  action 1.0 puts "PPS are more than 2"
+
+
