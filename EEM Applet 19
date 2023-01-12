@@ -1,0 +1,6 @@
+#Simple eem script for interface counter transmit_rate_pps which is transmitted packets per second rate. You can trigger it in lab environment by pinging via 
+that interface gig1 a 1000 packets in repeat.
+
+event manager applet interface
+ event interface name GigabitEthernet1 parameter transmit_rate_pps entry-op ge entry-val 2 entry-type value poll-interval 1
+ action 1.0 puts "PPS are more than 2"
