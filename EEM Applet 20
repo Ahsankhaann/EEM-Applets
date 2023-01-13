@@ -1,0 +1,42 @@
+//Some notes for IP SLA: 
+The frequency correlates to how often the test is performed (i.e., how often packets are sent). The router won’t let you set this value lower than the timeout 
+value.
+The threshold value is a predefined value that is used to determine the success or failure of a specific operation. When the operation's results exceed or fall 
+below the threshold value, it is considered a failure or success, respectively. The timeout value, on the other hand, is the maximum amount of time a router
+will wait for a response or acknowledgement after sending packets. If a response is not received within the specified timeout period, the router will consider
+the operation to have failed. The router won’t let you set this value lower than the threshold.
+In general, the timeout value should be greater than the threshold value. The threshold value is used to determine if an operation is considered a success or
+failure based on the results of that operation, while the timeout value is the amount of time that the router will wait for a response or acknowledgement 
+before considering the operation to have failed. If the timeout value is less than the threshold value, the router may consider the operation to have failed
+before it has a chance to complete, resulting in an incorrect determination of success or failure.
+It is always recommended to set the timeout value greater than threshold value, in order to have enough time to complete the operation and evaluate the results
+before determining success or failure.//
+
+//In this EEM Applet, we are using the reaction-type timeout of IP SLA 1 to trigger the event and print a statement, it can be triggered if you shut down
+interface on Router2 which the Router1 is trying to connect, this will timeout the IP SLA 1 and hence cause a reaction.  IP SLA reaction-configuration
+and IP SLA enable reacion-alaerts needs to go in the config in order for this work.//
+
+
+
+
+#IP SLA Config on Router1:
+
+ip sla 1
+ tcp-connect 192.168.1.2 5000 source-ip 192.168.1.1 control disable
+ threshold 500
+ timeout 1000
+ frequency 5
+ip sla schedule 1 life forever start-time now
+ip sla reaction-configuration 1 react timeout threshold-type immediate
+ip sla enable reaction-alerts
+
+#IP SLA Config on Router2:
+
+ip sla responder tcp-connect ipaddress 192.168.1.2 port 5000
+
+
+#EEM Config on Router1:
+
+event manager applet ipsla
+ event ipsla operation-id 1 reaction-type timeout
+ action 1.0 puts "SLA EVENT TRIGGERED"
