@@ -1,0 +1,61 @@
+//This is a simple EEM script, we are using routing detector here and matching on 55.55.55.0/24 network, if this network has a route that has been added or
+changed or deleted; our event will get triggered based on that. So we can ofcourse shutdown or no shut the loopback with this address which is available on
+router2 and it will prompt our event in Router1. We are making use of some in-built variables in action 1.0 which are found in event detector routing.
+Here action 1.0 will not display the value of $_routing_vrf_name because the route doesn't exist in any kind of VRF.//
+
+
+event manager applet rib
+ event routing network 55.55.55.0/24
+ action 1.0 puts "Route $_routing_network/$_routing_prefix_len has changed by $_routing_protocol in vrf $_routing_vrf_name"
+ 
+//This is another example, here we are looking for network 100.1.1.0/24 which is not existing anywhere but its for the sake of lab environment. We made a
+VRF_a and added int lo1 into that and assigned it an ip address, we then statically defined a route and just at the moment we hit enter, we had triggered
+the event rib1 because we added a route to 100.1.1.0 255.255.25.0 in the rib statically and that was enough to trigger the event as it was general and
+it would trigger regardless whether route was added/deleted/modified via routing protocol or static route. This time action 1.0 will also display the
+value of $_routing_vrf_name because we are adding the route in vrf_a.//
+
+ vrf definition vrf_a
+ address-family ipv4
+ 
+int lo 1
+ vrf forwarding vrf_a
+ ip add 10.10.10.10 255.255.255.0 
+ 
+ ip route vrf vrf_a 100.1.1.0 255.255.255.0 10.10.10.100
+ 
+event manager applet rib1
+ event routing network 100.1.1.0/24 
+action 1.0 puts "Route $_routing_network/$_routing_prefix_len has changed by $_routing_protocol in vrf $_routing_vrf_name"
+
+//This is the exact same applet like above but it is more specific in terms of what prefix of that network would trigger the event, so as u can see, prefix
+should be greater or equal to 24 or less than or equal to 26. In the below static route configuration, the first two routes will trigger the event because
+they are /25 and /26 whereas /27 and /28 wouldn't because they are out of bounds according to what we specified in the event trigger condition.//
+
+vrf definition vrf_a
+ address-family ipv4
+ 
+int lo 1
+ vrf forwarding vrf_a
+ ip add 10.10.10.10 255.255.255.0 
+
+ip route vrf vrf_a 100.1.1.0 255.255.255.128 10.10.10.100
+ip route vrf vrf_a 100.1.1.0 255.255.255.192 10.10.10.100
+ip route vrf vrf_a 100.1.1.0 255.255.255.224 10.10.10.100
+ip route vrf vrf_a 100.1.1.0 255.255.255.240 10.10.10.100
+ 
+event manager applet rib1
+ event routing network 100.1.1.0/24 ge 24 le 26
+action 1.0 puts "Route $_routing_network/$_routing_prefix_len has changed by $_routing_protocol in vrf $_routing_vrf_name"
+
+
+//This is the fourth variation where we just want to trigger this event if vrf_a has been put with a route from that network, if any other vrf-b or vrf-c etc
+have been added with the route from that network, it wouldn't trigger the event.//
+
+event manager applet rib1
+ event routing network 100.1.1.0/24 vrf name vrf_a
+action 1.0 puts "Route $_routing_network/$_routing_prefix_len has changed by $_routing_protocol in vrf $_routing_vrf_name"
+
+ip route vrf vrf_b 100.1.1.0 255.255.255.0 10.10.10.100                     #Not trigger the event
+ip route vrf vrf_a 100.1.1.0 255.255.255.0 10.10.10.100                     #Triggers the event
+
+
