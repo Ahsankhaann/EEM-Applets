@@ -1,0 +1,22 @@
+//This applet is made to use OID for 5min cpu utilization average and be triggered when the utilization raise above 1 percent thou its not practical for 
+production environment and also this script might or might not work for you because OIDs are dependent on platform and code and software used on the device.
+Also its actually hard to raise your CPU utilization manually in a lab environment.//
+
+event manager applet snmp_5min_cpu_utilization_avg
+ event snmp oid 1.3.6.1.4.1.9.9.109.1.1.1.1.5 get-type exact entry-op ge entry-val "1" poll-interval 10
+ action 10 puts "SNMP event triggered current value $_snmp_oid_val"
+ 
+//These below applet will raise an event if the interface admin status goes up or down, these are all explained in that specific OID if you look at it in the
+SNMP Object Navigator tool of Cisco and it tells you what each entry-val you can put in and what they do. Entry-val 1 represents interface as up, 2 represents 
+interface status as down and 3 represents the interface status as testing, thou we didn't use 3.
+Now again this SNMP EEM script depends on OID and OID (Object identifier) depends on the platform and the code of the device so it may or may not work for your
+device. It's not like you can copy and paste this config on all your devices and expect them to work, you need to verify the SNMP Object Identifiers and so 
+on.//
+
+event manager applet snmp_admin_up
+ event snmp oid 1.3.6.1.2.1.2.2.1.7 get-type exact entry-op eq entry-val "1" poll-interval 1
+action 1.0 puts "Value is $_snmp_oid_val Interface is up"
+ 
+event manager applet snmp_admin_down
+ event snmp oid 1.3.6.1.2.1.2.2.1.7 get-type exact entry-op eq entry-val "2" poll-interval 1
+action 1.0 puts "Value is $_snmp_oid_val Interface is down"
