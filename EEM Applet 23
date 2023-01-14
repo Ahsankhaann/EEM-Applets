@@ -1,0 +1,15 @@
+//Simple applet that is showing how to create an event snmp-notification, the direction would be incoming if you're the SNMP server and outgoing if
+you are the SNMP client thats how u will create an event based on generating or not generating snmp traps and notifications.//
+
+event manager applet SNMP_NOTIFICATIONS
+ event snmp-notification oid 1 oid-val "1" op eq src-ip-address 192.168.1.2 dest-ip-address 192.168.1.1 direction incoming
+ 
+ 
+ //Simple applet for SNMP-object event, this would be intercepting an SNMP trap and saying OKAY SO IM GONNA intercept this trap and then your choices ofcourse 
+ would be with the sync, sync yes ofcourse u can set the exit_status to 1 and go ahead and send the original traffic through and do whatever actions we say
+ here, our action could be to generate a completely different SNMP trap. So we have a choice to intercept original SNMP trap and modify it before changing it
+ or just send the original trap. So this event will get trigger and then some actions will be performed that will tamper the SNMP trap parameters, those changes
+ will be defined in actions.
+ 
+ event manager applet SNMP_OBJ
+ event snmp-object oid 1.9.9.9.9 type gauge sync yes
