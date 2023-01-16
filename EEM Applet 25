@@ -1,3 +1,6 @@
+//Note: In taskname, the process name you type in quotes is case sensitive so make sure you copy the exact match from the show proc cpu or show proc memory 
+output//
+
 //Applet demontrating ussage of IOS Watchdog system event, tasksname is big here, we are using it to exactly match the processes of either CPU or Memory,
 First example is of CPU proc, so you can find this IP Input when you type "show proc cpu | sec IP Input" or you can type "show proc cpu" and enter any process
 name here to match on, then you specify the operation, in my case i did it greater than or equal to operator and the value to be 1 and period of 10 seconds, 
@@ -22,7 +25,7 @@ event manager applet IOS_WD_2
 //Another example of applet, is 3rd example, where i used the taskname "IP Traceroute" which i found in "show proc memory", operator is set to GE and
 val is 0, is-percent is true means the value is taken in percentage and perido of 60 second. So if value goes above or equal to 0% within a 60 period; it will
 trigger the event and print the message. I was able to trigger this event by tracerouting to a directly connected neighbor. Thou its unrealistic value but
-just for the sake of lab, i made it very low to trigger it.
+just for the sake of lab, i made it very low to trigger it.//
  
 event manager applet IOS_WD_3
  event ioswdsysmon sub1 mem-proc taskname "IP Traceroute" op ge val 0 is-percent true period 60
