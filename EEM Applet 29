@@ -1,0 +1,7 @@
+#This event is making use of neighbor-discovery event and we are looking for all cdp events, all link-event and all line-event on int gig 1. If the neighbor
+connected to our gig1 goes down, our event will be triggered, if our int gig1 shuts, we will get notified, if our int gig1 comes back up, we will get notified.
+So this event is to monitor such sort of events. 
+
+event manager applet 1
+ event neighbor-discovery interface GigabitEthernet1 cdp all link-event all line-event all
+ action 1.0 puts "Something happened to our CDP neighbor"
