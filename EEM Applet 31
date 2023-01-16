@@ -1,0 +1,17 @@
+#This is a the most common way to send an email once your event is triggered, you priorly make these environment variables with the correct credentials, 
+assuming you also have a SMTP somewhere in your network, then this is how you will have event manager to send an email to you and your manager once any 
+event triggers. The following example below, wouldn't generate an email because unfortunately in my lab environment, i don't have an SMTP server configured but
+if the email server address was correct then we should be receiving those emails. Also, in order to verify that your script is correct, you can use the
+"debug event manager action mail" command and then manually trigger applet 1, you will see in the debug messages that your script is trying to establish
+connection to the SMTP server and if the address was correct then it would be successful.
+
+event manager environment _email_from router@abc.com
+event manager environment _email_server 192.168.1.1 
+event manager environment _email_to netadmin@abc.com
+event manager environment _email_cc manager@abc.com
+
+event manager applet 1
+ event none
+ action 1.0 cli command "en"
+ action 2.0 cli command "sh ip route"
+ action 3.0 mail server "_email_server" to "_email_to" from "_email_from" cc "_email_cc" subject "Router route table" body "$_cli_result"
