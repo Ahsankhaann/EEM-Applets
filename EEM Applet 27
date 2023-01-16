@@ -1,0 +1,27 @@
+//CRON Scheduling Supports first five fields of UNIX CRON Deamon = Minute : Hour : Day-of-Month : Month : Day-of-Week, in other words the cron-entry should be
+given like below in quotes and then the timing specified, the asterik is used to say COULD BE ANYTHING I DONT CARE. Now be wary of the clock and date of your
+router while configuring the cron timer, it should be correct and up-to-date. You can also use lists to be more specific i.e. (1,2,5,9 or 0-4,8-12) or u can
+use Step value in conjunction with a range i.e. 0-23/2 means in 24 hour, i want this script to run every 2 hour, so the value after the slash '/' tells it
+to run it 24 hours but skip every 2, so it would be every 2th hour in a 24 hour day.
+
+CRON Special Strings
+@yearly - Once a Year (0 0 1 1 *)
+@annually - Same as @yearly
+@monthly - Once a month (0 0 1 * *)
+@weekly - Once a week (0 0 * * 0)
+@daily - Once a day (0 0 * * *)
+@midnight - Same as @daily
+@hourly - Once per hour (0 * * * *)
+
+You can also make use of these predefined strings in your cron-entry and they will work perfectly too if you dont want to get fancy and configure very specific
+timings for your script i.e.  event timer cron cron-entry @hourly, this will make sure that your event gets triggered every hour.
+
+You can be granular like i wanna trigger it at noon and monday through friday so the cron-entry would be : 0 12 * * 1-5, where 1 is monday and 5 is friday.
+With this in mind, 0 would be for sunday and 6 would be for saturday. So you can be very specific in respect to when do you want your event to trigger with
+CRON.
+
+
+ 
+event manager applet 1
+ event timer cron cron-entry "45 15 * * *"
+ action 1.0 puts "Cron timer working"
