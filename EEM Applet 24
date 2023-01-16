@@ -1,0 +1,15 @@
+//Simple applet, event trigger condition is to match on syslog messages, here the pattern is defined in regular expression and if it occurs twice in a period
+of 60 second and the output is from priority level 5 (Notifications) then the event will be triggered//
+
+event manager applet 1
+ event syslog occurs 2 priority notifications pattern ".*UPDOWN.*Gigabit.*" period 60
+ action 1.0 puts "Interface flapping, it seems like"
+ 
+//Now what if we want to hide some syslog messages and make sure they never appear in the console? For example a CPU Fan has gone bad and you already know it 
+but the logging keeps on irritating you again and again? Well you can use the below commands for it. The first command is creating a discriminator named DISC
+and is dropping from severity 5 syslog messages and specifically its meant to target that specific msg-body defined in quotes. But discriminator just itself 
+created is in inactive mode if you view it by typing "sh logging", its not active by now, in order to activate it, you will type the second command so now
+that discriminator will be active for logging console window and will hide those messages defined in it for the conosle.
+
+logging discriminator DISC severity drops 5 msg-body drops ".*UPDOWN.*Gigabit.*"
+logging console discriminator DISC
