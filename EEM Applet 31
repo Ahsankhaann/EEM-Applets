@@ -1,9 +1,15 @@
-#This is a the most common way to send an email once your event is triggered, you priorly make these environment variables with the correct credentials, 
+//This is a the most common way to send an email once your event is triggered, you priorly make these environment variables with the correct credentials, 
 assuming you also have a SMTP somewhere in your network, then this is how you will have event manager to send an email to you and your manager once any 
 event triggers. The following example below, wouldn't generate an email because unfortunately in my lab environment, i don't have an SMTP server configured but
 if the email server address was correct then we should be receiving those emails. Also, in order to verify that your script is correct, you can use the
 "debug event manager action mail" command and then manually trigger applet 1, you will see in the debug messages that your script is trying to establish
-connection to the SMTP server and if the address was correct then it would be successful.
+connection to the SMTP server and if the address was correct then it would be successful. 
+You can also do additional stuff in this mail action like secure TLS if u have TLS configured or none for no SMTP security, you can specify a port which your 
+script will use to hit the SMTP server, some devices are old and dont support authentication or security so u might need to open outbound SMTP relay on the
+server and if you're doing it u might wanna do that on an ODD port so that people dont just accidently find it i.e. 1066 etc, again this port is entirely
+optional you dont have to do it, we can also do VRF in here if we wanted to source the email from a VRF i.e. management VRF, thats where you would do it.
+We can also specify the source-address of the email or specify a source-interface like maybe i wanna source this email from the loopback etc. And the subject
+is mandatory, you cannot skip the subject and finally comes the body.
 
 event manager environment _email_from router@abc.com
 event manager environment _email_server 192.168.1.1 
