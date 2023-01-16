@@ -1,0 +1,25 @@
+//This applet is to portray different timers we have in EEM which are Absolute, Countdown, Watchdog, CRON. In this file, i have shown examples of Absolute,
+Countdown and Watchdog timer, CRON timer will be covered in the next applet. So first example of Absolute timer, the time is defined in EPOCH format, and u can
+find a epoch converter on the google and calculate the exact time you want your script to run and copy/paste that epoch timer in the event timer absolute time
+and it will work breezely. The below epoch timer of 1673864220 is of 16 jan 2023 03:17:00 pm time, i tested this out and it worked perfectly, this particular
+timer 'absolute' requires that you enter the entire timezone along with date in a epoch format to work.//
+
+event manager applet 1
+ event timer absolute time 1673864220
+ action 1.0 puts "Absolute timer worked"
+ 
+//This example is of countdown timer, it will trigger the event once in 20 seconds starting from the moment you exit out of applet after creating it and 
+ofcourse u can set whatever time you want and it will countdown backward. For instance if u set countdown timer to 3600 seconds then it means the event
+will get triggered after one hour when you exit out of that applet, and it will trigger only once.
+ 
+event manager applet 2
+ event timer countdown time 20
+ action 1.0 puts "countdown timer worked"
+ 
+//This example is of Watchdog timer, in my case i configured the watchdog time to 20 second, it means the event will trigger every 20 econds after i exit
+out of the applet after creating it, if i set the time to 3600 seconds then it will trigger every hour. Thats the idea, it runs in a cycle and triggers the
+event after the defined time has passed and will keep on triggering it after every cycle of that duration.
+ 
+event manager applet 3
+ event timer watchdog time 20
+ action 1.0 puts "Watchdog timer worked"
