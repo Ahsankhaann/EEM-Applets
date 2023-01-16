@@ -1,0 +1,29 @@
+//Applet demontrating ussage of IOS Watchdog system event, tasksname is big here, we are using it to exactly match the processes of either CPU or Memory,
+First example is of CPU proc, so you can find this IP Input when you type "show proc cpu | sec IP Input" or you can type "show proc cpu" and enter any process
+name here to match on, then you specify the operation, in my case i did it greater than or equal to operator and the value to be 1 and period of 10 seconds, 
+so its a value of 1 percent within say a period of 10 second. If this event gets triggered, we will get our message printed on cli.//
+
+event manager applet IOS_WD_1
+ event ioswdsysmon sub1 cpu-proc taskname "IP Input" op ge val 1 period 10
+ action 1.0 puts "IP Input increasing"
+
+//Another example of applet, this time we are watching memory-proc and again those processess which u can enter in the taskname of memory proc can be found
+in "show proc memory", here we are using operator greater than and values of memory-proc is by default in kilobits, thou we can change it by setting 
+ispercent to true which means that the value will now be taken as percent rather than kilobits, thou here we specified that ispercent is false means the value
+is indeed in kilobits. Value is 100k and in a period of 10 seconds and when this event is triggered we will print a message defined in action 1.0.
+Now in my lab, i saw this output printed various times while i was looking through various "show proc cpu" and "show proc memory" output. You can try to trigger
+it that way too since the value is very unrealistic i.e. 100k and its triggered many times.//
+
+
+event manager applet IOS_WD_2
+ event ioswdsysmon sub1 mem-proc taskname "Net Input" op gt val 100 is-percent false period 10
+ action 1.0 puts "Net Input increasing"
+ 
+//Another example of applet, is 3rd example, where i used the taskname "IP Traceroute" which i found in "show proc memory", operator is set to GE and
+val is 0, is-percent is true means the value is taken in percentage and perido of 60 second. So if value goes above or equal to 0% within a 60 period; it will
+trigger the event and print the message. I was able to trigger this event by tracerouting to a directly connected neighbor. Thou its unrealistic value but
+just for the sake of lab, i made it very low to trigger it.
+ 
+event manager applet IOS_WD_3
+ event ioswdsysmon sub1 mem-proc taskname "IP Traceroute" op ge val 0 is-percent true period 60
+ action 1.0 puts "IP Traceroute memory usage increasing"
