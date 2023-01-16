@@ -2,7 +2,9 @@
 Countdown and Watchdog timer, CRON timer will be covered in the next applet. So first example of Absolute timer, the time is defined in EPOCH format, and u can
 find a epoch converter on the google and calculate the exact time you want your script to run and copy/paste that epoch timer in the event timer absolute time
 and it will work breezely. The below epoch timer of 1673864220 is of 16 jan 2023 03:17:00 pm time, i tested this out and it worked perfectly, this particular
-timer 'absolute' requires that you enter the entire timezone along with date in a epoch format to work.//
+timer 'absolute' requires that you enter the entire timezone along with date in a epoch format to work. Also while you're at the epoch time converter, make sure 
+your epoch format is set to local time if thats what you're referencing to as the format differs from GMT time but if your Router is set to GMT then you would
+be fine with GMT format. The below epoch timer is in local time (Pakistan's).//
 
 event manager applet 1
  event timer absolute time 1673864220
