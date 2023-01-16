@@ -1,0 +1,6 @@
+//This config event is really simple, it triggers the event everytime somebody exit out of the config terminal mode and in this case it will print a message
+when that happens.//
+
+event manager applet 1
+ event config
+ action 1.0 puts "Get out of config terminal"
