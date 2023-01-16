@@ -1,0 +1,25 @@
+#Here we are triggering the event manually thats why the event is none, we can also debug these manual triggering of events by typing 
+"debug event manager action cli" and you will see when you try to execute this script, it wouldn't work because copy run start brings forth a prompt and
+we need to press Enter or carriage return to confirm it but our Event manager doen't do that. And it remains stucked in the script until default maxrun timer
+of 20 second kicks in and terminate the script as we can see in the debug output. Now i included this here to show you the step by step working of the Event
+Manager and how it works and how to tackle such issues. The improved version that recitifed this issue is below:
+
+event manager applet 1
+ event none
+ action .5  cli command "en"
+ action 1.0 cli command "copy run start" 
+
+
+
+
+
+
+#Here, we included a new keyword pattern, which will look for a pattern "Destination" in the output after it writes the cli command "copy run start" and then
+the action 1.5 will send a carriage return with its cli commmand empty quotes "", in other words this is the way you can send an enter key to the command line
+using event manager. And this script will work perfectly.
+
+event manager applet 1
+ event none
+ action .5  cli command "en"
+ action 1.0 cli command "copy run start" pattern "Destination"
+ action 1.5 cli command ""
