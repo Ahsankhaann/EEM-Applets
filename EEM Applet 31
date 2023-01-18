@@ -9,7 +9,7 @@ script will use to hit the SMTP server, some devices are old and dont support au
 server and if you're doing it u might wanna do that on an ODD port so that people dont just accidently find it i.e. 1066 etc, again this port is entirely
 optional you dont have to do it, we can also do VRF in here if we wanted to source the email from a VRF i.e. management VRF, thats where you would do it.
 We can also specify the source-address of the email or specify a source-interface like maybe i wanna source this email from the loopback etc. And the subject
-is mandatory, you cannot skip the subject and finally comes the body.
+is mandatory, you cannot skip the subject and finally comes the body.//
 
 event manager environment _email_from router@abc.com
 event manager environment _email_server 192.168.1.1 
