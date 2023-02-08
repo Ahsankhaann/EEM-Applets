@@ -1,0 +1,12 @@
+//In this example, what we can do is actually have an applet trigger another applet. This could ofcourse also be a TCL policy thats been registered.
+So if we type show ip int brief, it will trigger this event and the action in this event will trigger a policy "1".//
+
+
+event manager applet 1
+ event none
+ action 1.0 puts "Ahsan"
+ 
+event manager applet 2
+ event cli pattern "show ip interface brief" sync no skip no
+ action 1.0 puts "Applet 2 ran"
+ action 2.0 policy 1 
