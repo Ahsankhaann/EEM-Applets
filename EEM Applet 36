@@ -1,0 +1,34 @@
+#This is general debugging info for EEM, these below are the big ones which people use most of the time.
+debug event manager action
+debug event manager detector
+debug event manager tcl
+
+#This one is used if you're using RPC other than that its not gonna be used.
+debug event manager xml
+
+#This would be for things like getting registered and registers kicking off.
+debug event manager server
+
+//one thing u can do is u can say no logging console just to have the debug and change the logging level that goes to buffer, thats a little trick u can do and 
+just have your debug go to the buffer so u can say like "do show log" and see the buffers, see the buffered logs and see how much debugs is gonna dump to the 
+screen before u turn it on and another thing that i always like to do is like before u type anything stupid is i would go into R2 and telnet to R1 prior to 
+making any changes to R1 so if u by mistake turn on debug like "debug ip packet" on R1 which is a production router and it flood your console terminal and u 
+lose access to it then i can always come back to R2 and undebug all using the telnet connection and it will solve the issue lol, so the idea is to kill it via 
+a different session.//
+
+
+//You can filter the output using an ACL, so if u just wanted to see OSPF, call it to an acl like lets say acl 100 is looking for ospf packets only then u can 
+use the command below to achieve that.//
+debug ip packet 100
+
+#This is what most of people dont know, this is setting a conditional debug, debug int gig1 is setting the condition to only debug ip packet for gig1 and 
+not for any other int and its gonna be less because its only relating to gig1. To turn conditional debug off, you type no debug int gig1 and this will
+remove the condition. Now just to let u know, if u dont type "no debug int g1" and instead u type "show debugging" then it keeps the condition, that 
+condition is still set, that can really get you later when you're trying to debug something completely different a week from now and u forget that debug 
+condition was set u know and u will be like WHY AM I NOT SEEING ANY PACKETS ON THAT INTERFACE gig2 xd, so dont forget the condition gets set and to turn off is 
+to say "no debug int gig1". While typing that no debug int gig1 command, it gives you a warning that maybe you are still debugging ip packet and you're removing
+the condition now which means you're gonna be debugging on everything, are you sure you want to do this? So its a great caution but sometimse an overkill 
+for lab environment where you're not really generating any huge traffic anyway.
+debug int gig1
+debug ip packet
+no debug int gig1
