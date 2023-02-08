@@ -1,0 +1,34 @@
+//Following are some things u can do with action info type snmp, action 1.0 is looking for that specific OID and getting that exact variable from the local
+device, thou after community public we could add ipaddress 10.2.2.2, and then action 1.0 would get that variable from a remote device which is present
+on that ip address. Action 2.0 is making use of snmp trap, the enterprise oid is a MIB and .2 is the SubMIB of it, the generic-trapnum is a trap number which
+is gonna be up to your SNMP software and then specific-trapnum this again could be any number and then trap-oid number and then trap-var which is trap variable
+name where u can say something like "sysUpTime.0" and send that to your snmp management software.
+Action 3.0 is making use of snmp inform and to do this u need to run snmp version 3 and it is pretty straightforward too, we type trap-oid and then trap-var 
+which is again trap variable name and then community public which means send it to public and then ipaddr is is the ip address of the server you wanna send it
+to.
+Action 4.0 is similar to action 1.0 but here we are using get-type next which means get the next value to what the OID is pointing towards. 
+Action 5.0 is also similar to action 1.0 but here we are setting the value instead of getting it and its an integer value and we want to set it to 10
+and its not for the local system instead this action is targetting a server present at 10.2.2.2 ip address.//
+
+
+event manager applet snmp
+ event none
+ action 1.0 info type snmp oid 1.3.6.1.2.1.1.1.0 get-type exact community public
+ action 2.0 info type snmp trap enterprise-oid ciscoSyslogMIB.2 generic-trapnum 6 specific-trapnum 1 trap-oid 1.3.6.1.2.1.1.1.0 trap-var "sysUpTime.0"
+ action 3.0 info type snmp inform trap-oid 1.3.6.1.2.1.1.1.0 trap-var "sysUPtime.0" community public ipaddr 10.2.2.2
+ action 4.0 info type snmp oid 1.3.6.1.2.1.1.1.0 get-type next community public
+ action 5.0 info type snmp oid 1.3.6.1.2.1.1.1.0 set-type int 10 community public ipaddr 10.2.2.2
+ 
+//Here we are using event snmp-object with an oid, the type of this oid is string means its a string, sync no and skip no is pretty self-explanatory and then
+istable can be yes or no, in other words when you call to an snmp object it can either be a single value or it can be an entire table stored in that object.
+So istable yes means its a table and istable no means its a single value. Then the default 0 means tell it to go ahead and send the original snmp trap 
+right away. So basically all we are doing with that is saying OKAY if that object occurs, still send that object, dont skip it, dont sync.
+Action context can save variables into the context in one applet and u can retrieve that variable into another applet, ofc after retrieving the variable, it is 
+deleted from the context database, and to save it u need to run the action context save again on the applet. So context is just a way you can save something
+and give it a key and then u can use that key to retrieve that variable into another applet.
+
+event manager applet snmp-obj
+ event snmp-object oid 1.3.6.1.2.1.1.1.0 type string sync no skip no istable yes default 0
+ action 1.0 syslog msg "SNMP-object triggered" facility "SNMP"
+ action 2.0 context save key OID variable "$_snmp_oid"
+ action 3.0 context save key VALUE variable "$_snmp_value"
