@@ -1,0 +1,29 @@
+//This is a simple example, where we are tracking a main link and if it goes down, we will reboot the router.//
+
+track 1 ip route 192.168.1.0 255.255.255.0 reach
+event man app LOSS_connectivity
+event track 1 state down
+action 1.0 puts " connectivity lost.. rebooting"
+action 2.0 reload
+
+
+//This can be made a bit more complex where we can also track multiple interfaces and reboot when many main link goes down, now if u are trying to just do this,
+then we can do this very simple through some stuff we have already seen, if u wanted to added more stuff later and what im referring to if we go back to that 
+application-specific event detector again, have it trigger a sub-system and a type and then u know that means that maybe some of your objects could a little 
+complicated, in other words maybe we dont wanna say JUST IF THE INTERFACES GOES DOWN but IF THE interfaces goes down and this happens okay, im just trying to 
+point out that u can get alot more complicated here with nesting and things like that if thats wat your interested in doing so, for what we wanna do is we just 
+wanna do the same thing that we just did, we just wanna say that if all the interfaces goes down.//
+
+track 1 ip route 192.168.1.0 255.255.255.0 reach
+track 2 ip route 192.168.2.0 255.255.255.0 reach
+
+event manager app net_down_reload
+event tag 1 track 1 state down
+event tag 2 track 2 state down
+ trigger
+  correlate event 1 and event 2 
+  exit
+action 100 cli command "enable"
+action 110 cli command "show logg"
+action 115 puts "$_cli_result"
+
