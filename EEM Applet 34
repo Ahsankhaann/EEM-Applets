@@ -25,5 +25,31 @@ event tag 2 track 2 state down
   exit
 action 100 cli command "enable"
 action 110 cli command "show logg"
-action 115 puts "$_cli_result"
 
+So we see when we shut those interfaces, we will see the event triggered, so there's the show log, so that part is working, now wat would be a real real common
+thing to do and lets give it a shot before i do it, we type "do dir" this is our file system okay, what i might wanna do is type "do mkdir flash:/logs" okay 
+this will create a folder called logs, when we type "do dir" again we can see logs. Cuz again here's what we are after, we got these two interfaces going down
+FINE THAT MEANS WE LOSE network connectivity which brings us to a rather large problem and that means whatever is going on and whatever the problem is, 
+whatever caused this, ur gonna have no record of it okay and if we reload this router, we are gonna lose the log files, now normally we would have it going to
+our syslog servers something like that but again the interfaces are down, the network is down, they cant write to the syslog server so before we just blindly
+reload this thing, wat we are gonna try do is have it actually write to a file here and here's how we do it. We added an event none so that we can trigger it
+manually for testing, action 120 we are opening a file at location flash:/logs and the name of the file is ahsancsr and we are opening it as w+ means in write
+mode and if the file is not present there then create it, if the file was already created before this applet ran then we could just use w instead of w+. 
+Now in action 130 we are providing a file descriptor string of flash:/logs and then the input to write in the opened file which is $_cli_result and then the
+size is defined. This is how we are able to create a file and also write into it our show logging logs, when we did show logg at action 110, it got stored in
+$_cli_result and we used that system variable to write into your log file that we created and wrote on action 120 and 130 respectively.
+
+event manager applet net_down_reload
+ event tag 1 track 1 state down
+ event tag 2 track 2 state down
+ event tag 3 none
+ trigger
+  correlate event 1 and event 2 or event 3
+ action 100 cli command "enable"
+ action 110 cli command "show logg"
+ action 120 file open flash:/logs ahsancsr w+
+ action 130 file write flash:/logs "$_cli_result" 40000000
+ action 140 file close flash:/logs
+
+#Here's another action which we can do to delete a file and this will delete the file but it wouldn't make sense to our above applet lol
+action 150 file delete flash:/logs/ahsancsr
