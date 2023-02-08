@@ -1,0 +1,28 @@
+//This is an example of application specific event, Event 1 is triggered when we enter show ip route on the cli, and this will publish 2 events to sub-system
+798, one event is of type 1 and other is of type 2 and they both hold their respective arguments i.e. 1, 2, 3, 4. Now event applet 2 will get triggered when
+something is published to subsystem 798 and specifically type 1 and it will then execute the action 1.0 which will print the arguments which were pushed to 
+subsystem 798 and type1. Similarly, Event applet 3 will get triggered similarly when something is pushed to subsystem 798 and specifically type 2 and it will
+print those arguments in action 1.0 which were pushed to subsystem 798 and type2. If we look at event applet 1, it has 2 actions and both are pushing some
+arguments to subsystem 798 type 1 and typ2 both. So when we type show ip route, applet 1 will trigger which will further trigger applet 2 and 3. 
+Now applet 4 is looking for show ip interface brief on the cli to be triggered and it has one action 1.0 which is publishing to subsystem 798 and type 1 which
+is same as applet 1 and it is triggering applet 2 just like applet 1 and they are forwarding some arguments to that type 1 subsystem 798 for which applet 2
+is listening for and it will therefore print the arguments respectively for whoever(applet 1 or applet4) triggered it.
+
+
+
+event manager applet 1
+ event cli pattern "show ip route" sync no skip no
+ action 1.0 publish-event sub-system 798 type 1 arg1 "Somebody typed" arg2 ""show ip route""
+ action 2.0 publish-event sub-system 798 type 2 arg1 "This is a test"
+ 
+event manager applet 2
+ event application sub-system 798 type 1
+ action 1.0 puts "output: $_application_data1 $_application_data2"
+ 
+event manager applet 3
+ event application sub-system 798 type 2
+ action 1.0 puts "output: $_application_data1"
+ 
+event manager applet 4
+ event cli pattern "show ip interface brief" sync no skip no
+ action 1.0 publish-event sub-system 798 type 1 arg1 "Somebody typed" arg2 ""Show ip int br""
