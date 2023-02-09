@@ -1,6 +1,6 @@
-#This applet will ensure that 192.168.175.2 is the statically defined default route until track 1 object is up where track 1 object is tracking gig3 so if 
+//This applet will ensure that 192.168.175.2 is the statically defined default route until track 1 object is up where track 1 object is tracking gig3 so if 
 gig 3 goes down, the floating default route via 192.168.2.2 will be operational. And the EEM script will display a message that internet is down and then the
-backup floating route will take affect.
+backup floating route will take affect.//
 
 track 1 int gig3 line-protocol
 ip route 0.0.0.0 0.0.0.0 192.168.175.2 track 1
@@ -13,3 +13,29 @@ event manager applet link_down trap
  action 30 cli command "sh ip route"
  action 40 puts $_cli_result
  exit
+
+
+//This is an applet to measure jitter using IP SLA and it will install a default route via tunnel int 0, in the event it detects jitter on the main route.
+so it would be an example of watching and ofcourse this obviously requires an IP SLA 10 to be setted up and everything for this one to work.//
+event manager applet jitter
+event ipsla operation-id 10 reaction-type jitterAvg
+action 10 cli command "en"
+action 20 if $_ipsla_measured_threshold_value gt $_ipsla_threshold_rising
+action 30 cli command "conf t"
+action 40 cli command "ip route 0.0.0.0 0.0.0.0 int tun 0"
+action 50 end
+action 60 syslog msg "Too much jitter - Switching to Backup Tunnel"
+"
+
+#This applet, will create multiple loopback interfaces and set their ip address from loopback 10 to 60 when its manually triggered.
+event manager applet SECRET
+event none
+action 10 set I 10
+action 20 cli command "en"
+action 30 cli command "conf t"
+action 40 while $I le 60
+action 50 add $I 0
+action 60 cli command "interface loopback $_result"
+action 70 cli command "ip 10.0.$_result.1 255.255.255.0"
+action 80 increment I
+action 90 end
