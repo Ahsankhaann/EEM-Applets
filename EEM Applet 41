@@ -1,0 +1,23 @@
+#Below is a random value generator code for EEM applet.
+
+event manager app random
+event none maxrun 60
+action 100 puts "loop running 5 times"
+action 110 set count 0
+action 120 while $count le 5
+action 125 cli command "en"
+action 130 cli command "sh clock"
+action 140 regexp ".*\.([0-9]+).*" "$_cli_result" match msec
+action 150 multiply $count $count
+action 160 multiply $msec $_result
+action 170 divide $_result 6 
+action 180 set i 0
+action 190 while $i le $_remainder
+action 200 wait 1
+action 210 increment i
+action 220 end
+action 230 puts "waited $_remainder seconds"
+action 240 increment count
+action 250 end 
+action 260 puts "DONE"
+end
