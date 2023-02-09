@@ -1,0 +1,17 @@
+
+
+
+event manager environment _email_to ahsan.khaann0@gmail.com
+event manager environment _email_from no-reply@choevent.com
+event manager environment _email_server_ smtp.googlemail.com
+event manager applet email
+
+ event tag 1 snmp oid 1.1.1.1.1.1.1.1 get-type exact entry-op ge entry-val "80" poll-interval 30
+ event tag 2 none
+ trigger
+  correlate event 1 or event 2
+ action 10 cli command "en"
+ action 20 cli command "term width 160"
+ action 30 cli command "term length 14"
+ action 40 cli command "sh proc cpu sorted 5min" pattern "More"
+ action 50 mail server "$_email_server_" to "$_email_to" from "$_email_from" subject "HELP ME !!!" body "hello"
