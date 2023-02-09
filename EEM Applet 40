@@ -1,0 +1,41 @@
+#A daily backup applet, which will send you sh run output on your email, 86400 seconds = 24 hours.
+event manager applet daily_backup
+ event timer watchdog name 24hr time 86400
+ action 10 cli command "en"
+ action 20 cli command "sh run
+ action 30 mail server $_email_server to $_email_to from $_email_from subject "Daily Backup" body "$_cli_result"
+ 
+ 
+ //This is how you can open a file in flash with w+ which will create a file if its not created before, and then it will write the $_cli_result into it,
+now we have two action 40 here and both are doing the same work which is write $_cli_result into the file.//
+ event manager applet file_write
+ event none
+ action 10 file open out flash:/logs/reboot.log w+
+ action 20 cli command "en"
+ action 30 cli command "show ip int brief"
+ action 40 file puts out "$_cli_result"
+ or
+ action 40 file write out "$_cli_result" 400000000
+ 
+ //This applet, will open flash:/logs/reboot.log as read only in file descriptor string "in" and next it will open flash:/logs/ahsancsr as write+ in file
+ descripter string "out", now 'in' file descriptor has reboot.log and 'out' file descripter has ahsancsr, now action 30 will store the data which 'in' file 
+ descriptor string read into CONTENTS variable and action 40 will write the data in $CONTENTS to out file descriptor string which is holding ahsancsr so in 
+ simple words 'out' file descripter is a pointer pointing to ahsancsr and 'in' file descripter is a pointer pointing to reboot.log. Now action 50 and 60
+ will close the files using their respective file descriptor string. And this is how we copy contents of one file to another file.
+event manager applet file_copy
+ event none
+ action 10 file open in flash:/logs/reboot.log r
+ action 20 file open out flash:/logs/ahsancsr w+
+ action 30 file read in CONTENTS
+ action 40 file puts out "$CONTENTS"
+ action 50 file close in
+ action 60 file close out
+ 
+ 
+ #Below is a very good command in case you're working on a remote device and you fear that u might make some changes by which u will lose connectivity to the
+ router, therefore you can type "reload in 30" and then if you do make some changes and you lose connectivity and you've not saved the running config into 
+ startup, then the router will auto restart in 30 minutes and you will again regain your connectivity. And if you have finished your modification and 
+ the router is functioning normally and you don't want it to restart in the next 30 minutes which you specified before starting the work then you can type
+ 'reload cancel'.
+ reload in 30
+ reload cancel
