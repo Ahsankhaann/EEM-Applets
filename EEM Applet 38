@@ -1,0 +1,56 @@
+ on R2
+ip sla 1
+ icmp-echo 10.0.24.4 source-interface fa0/0.12
+ timeout 5000
+ frequency 5
+ exit
+ip sla schedule 1 start now life forever
+
+
+track 1 ip sla 1
+
+Event manager applet BACKUP
+ event track 1 state down
+ action 10 cli command "en"
+ action 20 cli command "conf t"
+ action 30 cli command "int fa0/0.23"
+ action 40 cli command "no shut"
+ action 50 syslog pri 2 msg "THE WHOLE INTERNET IS DOWN, Bringing up backup interface"
+ exit
+
+int fa0/0.23
+shut
+
+event man app RECOVER
+ event track 1 state up
+ action 100 cli command "en"
+ action 110 set DONE 0
+ action 120 while $DONE ne 1
+ action 130 wait 5
+ action 140 cli command "ping 10.4.4.4 so fa0/0.24"
+ action 150 regexp "!!!" "$_cli_result"
+ action 160 if $_regexp_result eq "1"
+ action 170 cli command "enable"
+ action 180 cli command "conf t"
+ action 190 cli command "int fa0/0.23" 
+ action 200 cli command "shut"
+ action 210 cli command "end"
+ action 220 set DONE 1
+ action 230 end
+ action 240 end
+ action 250 syslog priority 5 msg "Primary Interface Restored"
+ 
+ on R2
+int fa0/0.23
+ ip ospf dead-interval minimal hello-multiplier 4
+int fa0/0.24
+ ip ospf dead-interval minimal hello-multiplier 4
+
+on R3
+int fa0/0.23
+ ip ospf dead-interval minimal hello-multiplier 4
+
+on R4
+int fa0/0.24
+ ip ospf dead-interval minimal hello-multiplier 4
+
